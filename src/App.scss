@@ -1,0 +1,109 @@
+
+.phone-container {
+    padding: 20px;
+
+    .phone-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .phone-header-left {
+            font-size: 20px;
+            font-weight: 600;
+        }
+    }
+
+    .phone-body {
+
+        display: flex;
+        flex-flow: column;
+
+        .status {
+            height: 180px;
+            position: relative;
+        }
+
+        .temp{
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+
+            .primary-text{
+                font-size: 56px;
+                margin: 0 2px;
+            }
+
+            .secondary-text {
+                display: flex;
+                flex-flow: column;
+
+                font-size: 18px;
+            }
+
+        }
+
+        .date {
+            display: flex;
+            flex-flow: row;
+            font-size: 12px;
+
+            .primary-text {
+                margin: 0 10px 0 2px;
+            }
+        }
+
+        .details { 
+            margin-top: 5px;
+            h3 {
+                font-size: 14px;
+            }
+
+            .detail-list {
+                display: grid;
+                grid-template-columns: auto auto;
+
+                .list-item {
+                    width: 130px;
+                    font-size: 18px;
+                    text-align: center;
+                    height: 60px;
+
+                    .label {
+                        font-size: 11px;
+                        color: rgb(106, 106, 106);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+.cloud {
+    width: 500px;
+    height: 275px;
+    border-radius: 50%;
+    position: absolute;
+    top: -35vh;
+    left: -25vw;
+  }
+  
+  #cloud-back {
+    filter: url(#filter-back);
+    box-shadow: 300px 300px 30px -20px #fff;
+  }
+  
+  #cloud-mid {
+    filter: url(#filter-mid);
+    box-shadow: 300px 340px 70px -60px rgba(158, 168, 179, 0.5);
+      left: -25vw;
+  }
+  
+  #cloud-front {
+    filter: url(#filter-front);
+    box-shadow: 300px 370px 60px -100px rgba(0, 0, 0, 0.3);
+      left: -25vw;
+  }
+  
+  
