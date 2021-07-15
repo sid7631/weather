@@ -1,19 +1,66 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { MoreVertical } from 'react-feather'
 import styled from 'styled-components'
 import Phone from '../../components/Phone'
 import Rains from '../../components/Rains'
+import { ForecastContext } from '../context/Forecast'
+import axios from 'axios'
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Typography } from '@material-ui/core'
+import Loading from '../../components/Loading'
+import moment from 'moment'
+
 
 const Dashboard = () => {
+
+    const context = useContext(ForecastContext)
+    const [data, setdata] = useState({})
+    const [loading, setloading] = useState(false)
+
+    useEffect(() => {
+
+        if (context.latitude && context.longitude) {
+
+            const getForecast = async () => {
+                try {
+                    setloading(true)
+                    const result = await axios.get('http://api.openweathermap.org/data/2.5/weather', {
+                        params: {
+                            lat: context.latitude,
+                            lon: context.longitude,
+                            appid: 'd57b443850be7a49fbeb4634371f7375',
+                            units: 'metric'
+                        }
+                    })
+
+                    console.log(result.data)
+                    setloading(false)
+                    setdata(result.data)
+                } catch (error) {
+                    console.log(error)
+                    setloading(false)
+                }
+
+            }
+
+            getForecast()
+        }
+
+        return () => {
+            //cleanup
+        }
+    }, [context.latitude, context.longitude])
+
     return (
         <DashboardContainer>
             <Row>
                 <Column width={'40%'} height={'100vh'}>
                     <Phone>
-                        <div className='phone-container'>
+                        <Box className='phone-container'>
+                            <Loading show={loading} />
                             <div className='phone-header'>
                                 <div className='phone-header-left'>
-                                    Dhanbad
+                                    {data?.name}
                                 </div>
                                 <div className='phone-header-actions'>
                                     <div>
@@ -27,7 +74,7 @@ const Dashboard = () => {
                                 </div>
                                 <div className="temp">
                                     <div className='primary-text'>
-                                        29
+                                        {Math.ceil(data?.main?.temp)}
                                     </div>
                                     <div className='secondary-text' >
                                         <div>&deg;C</div>
@@ -36,10 +83,10 @@ const Dashboard = () => {
                                 </div>
                                 <div className="date">
                                     <div className="primary-text">
-                                        26 May Wed
+                                        {moment(data?.dt * 1000).format('DD MMM[,] ddd')}
                                     </div>
                                     <div className="secondary-text">
-                                        29&deg;C / 22&deg;C
+                                        {Math.ceil(data?.main?.temp_max)}&deg;C / {Math.ceil(data?.main?.temp_min)}&deg;C
                                     </div>
                                 </div>
                                 <div className="details">
@@ -48,15 +95,15 @@ const Dashboard = () => {
                                     <div className="detail-list">
                                         <div className="list-item">
                                             <div className='label'>Feels like</div>
-                                            <div>32&deg;C</div>
+                                            <div>{Math.ceil(data?.main?.feels_like)}&deg;C</div>
                                         </div>
                                         <div className="list-item">
                                             <div className='label'>Humidity</div>
-                                            <div>73%C</div>
+                                            <div>{data?.main?.humidity}%</div>
                                         </div>
                                         <div className="list-item">
                                             <div className='label'>E wind</div>
-                                            <div>5 km/h</div>
+                                            <div>{data?.wind?.speed} km/h</div>
                                         </div>
                                         <div className="list-item">
                                             <div className='label'>UV</div>
@@ -64,16 +111,16 @@ const Dashboard = () => {
                                         </div>
                                         <div className="list-item">
                                             <div className='label'>Visibility</div>
-                                            <div>16km</div>
+                                            <div>{data?.visibility / 1000}km</div>
                                         </div>
                                         <div className="list-item">
                                             <div className='label'>Air pressure</div>
-                                            <div>1001 hPa</div>
+                                            <div>{data?.main?.pressure} hPa</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </Box>
                     </Phone>
                 </Column>
             </Row>
